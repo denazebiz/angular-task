@@ -1,15 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
+import {JobStatus} from "../../../../core/models/job-status";
+import {JobsService} from "../../../../core/services/jobs.service";
+import {Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-job-create',
   templateUrl: './job-create.component.html',
   styleUrls: ['./job-create.component.css']
 })
-export class JobCreateComponent implements OnInit {
+export class JobCreateComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
+  jobForm: FormGroup = new FormGroup({
+    ['summary']: new FormControl(''),
+    ['description']: new FormControl(''),
+    ['status']: new FormControl(JobStatus.open),
+    ['property_id']: new FormControl()
+  });
 
-  constructor() { }
+  constructor(
+    private jobsService: JobsService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
   }
 
+  onSubmit() {
+    this.subscription.add(
+      this.jobsService.create$(this.jobForm.value)
+        .subscribe(
+          value => {
+            this.router.navigate(['/']).catch(e => console.error('router navigation error: ', e));
+          },
+          error => {
+            console.error('Job creation failed: ', error);
+          }
+        )
+
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

@@ -18,6 +18,6 @@ export class JobsService {
   }
 
   public create$(job: Job): Observable<number> {
-    return this.httpClient.post<number>(environment.apiUrl + 'some-create-url', job);
+    return this.httpClient.post<number>(environment.apiUrl, job);
   }
 }
