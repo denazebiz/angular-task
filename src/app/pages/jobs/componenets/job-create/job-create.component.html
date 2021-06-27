@@ -7,6 +7,12 @@
 
   <label for="status">Status: </label>
   <input id="status" type="text" formControlName="status">
+
+  <select formControlName="state" *ngIf="properties$ | async as properties">
+    <option *ngFor="let prorerty of properties" [ngValue]="prorerty.id">
+      {{ prorerty.name }}
+    </option>
+  </select>
   <p>Complete the form to enable button.</p>
   <button type="submit" [disabled]="!jobForm.valid">Submit</button>
 </form>

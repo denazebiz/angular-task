@@ -2,8 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {JobStatus} from "../../../../core/models/job-status";
 import {JobsService} from "../../../../core/services/jobs.service";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {PropertyService} from "../../../../core/services/property.service";
+import {Propertie} from "../../../../core/models/propertie";
 
 @Component({
   selector: 'app-job-create',
@@ -12,6 +14,7 @@ import {Router} from "@angular/router";
 })
 export class JobCreateComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
+  public properties$: Observable<Propertie[]> = this.propertieService.get$();
   jobForm: FormGroup = new FormGroup({
     ['summary']: new FormControl(''),
     ['description']: new FormControl(''),
@@ -21,6 +24,7 @@ export class JobCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private jobsService: JobsService,
+    private propertieService: PropertyService,
     private router: Router
   ) { }
 
