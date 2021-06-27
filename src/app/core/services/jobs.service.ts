@@ -14,7 +14,7 @@ export class JobsService {
   ) { }
 
   public get$(): Observable<Job[]> {
-    return this.httpClient.get<Job[]>(environment.apiUrl + 'some-path');
+    return this.httpClient.get<Job[]>(environment.apiUrl + 'jobs');
   }
 
   public create$(job: Job): Observable<number> {
